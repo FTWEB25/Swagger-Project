@@ -4,6 +4,8 @@ const cors=require("cors")
 const connection = require("./db")
 const userRouter = require("./routes/user.routes")
 require("dotenv").config()
+const swaggerJsDoc=require("swagger-jsdoc")
+const swaggerUi=require("swagger-ui-express")
 
 // ****************************************** //
 
@@ -12,6 +14,35 @@ require("dotenv").config()
 const app=express()
 
 // ****************************************** //
+
+// swagger API configuration //
+
+const options={
+    definition:{
+        openapi:"3.0.0",
+        info:{
+            title:"Swagger Project",
+            version:"1.0.0"
+        },
+        servers:[
+            {
+                url:"http://localhost:8080"
+            }
+        ]
+    },
+    apis:["./routes/*.js"]
+}
+
+//Swagger API specification
+
+const openAPIspec=swaggerJsDoc(options)
+
+
+// Swagger API UI build
+
+app.use("/docs",swaggerUi.serve,swaggerUi.setup(openAPIspec))
+
+
 
 
 // all the middlewares here
